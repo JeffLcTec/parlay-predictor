@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Type-check · Lint · Unit tests
+    name: Type-check · Lint · Tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -35,9 +35,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Unit tests
-        run: npm run test:unit
+      - name: Tests (unit + integration)
+        # Smoke tests (tests/smoke/**) hit live APIs and are LOCAL-ONLY — not run here.
+        run: npm test
         env:
-          # Smoke tests are excluded by vitest config (tests/smoke/**)
-          # No API keys needed for unit tests
           NODE_ENV: test

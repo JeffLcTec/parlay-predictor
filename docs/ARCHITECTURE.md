@@ -51,3 +51,10 @@ Browser (Next.js) ──► /api/parlay/generate
 **Context:** LLMs propose player props for players who left teams seasons ago. This produces confident but wrong predictions.  
 **Decision:** `get_team_roster` and `get_player_stats` tools fetch current ESPN data. `get_player_stats` includes ghost-player check: if player not found on current roster, return error + actual roster list. Prompt rules prohibit using any player not confirmed by tool data.  
 **Consequences:** Every player prop requires 2 tool calls (roster + stats). More iterations, more tokens. The accuracy improvement justifies the cost.
+
+### ADR-004: Scaffold on Next.js 16 (not 14) with Tailwind v4 and Vitest 4
+**Status:** accepted  
+**Date:** 2026-06-12  
+**Context:** Original plan targeted Next.js 14. At scaffold time, `create-next-app@latest` on Node 25 installs Next.js 16 + React 19 + Tailwind v4 + ESLint 9 (flat config). Pinning to 14 risks Node 25 incompatibility and dated tooling.  
+**Decision:** Adopt the latest stable toolchain (Next 16 / React 19 / Tailwind v4 / Vitest 4). Test layout split into `tests/{unit,integration,smoke}`: unit+integration run in CI, smoke (live external APIs) is local-only. Path alias `@/` resolved natively by Vitest 4 (no `vite-tsconfig-paths` plugin). Workspace root pinned via `turbopack.root` in `next.config.ts` to avoid a stray home-dir lockfile being treated as root.  
+**Consequences:** Next 16 has breaking changes vs older training data — Next-specific code must be checked against `node_modules/next/dist/docs/` (flagged in root `AGENTS.md`). Tailwind v4 uses CSS-based config (no `tailwind.config.js`). Verification gate per PR: `type-check` + `lint` + `test` + `build` all green locally before opening, enforced again by GitHub Actions CI.
