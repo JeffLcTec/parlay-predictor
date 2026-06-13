@@ -14,12 +14,13 @@ Status: [ ] open | [~] in-progress | [x] done
 - [x] CLAUDE.md
 
 ## Milestone 1 — Project Scaffold
-- [ ] 🔴 Scaffold Next.js 14 (TypeScript strict, Tailwind CSS, App Router)
-- [ ] 🔴 Configure Vitest with separate unit/smoke globs
-- [ ] 🔴 Configure ESLint (strict) + Prettier
-- [ ] 🔴 Configure path aliases (`@/` → `src/`)
-- [ ] 🔴 Create `.env.local` from previous project keys
-- [ ] 🔴 Create `develop` branch + initial commit on main
+- [x] Scaffold Next.js (16, TypeScript strict, Tailwind v4, App Router) — was planned as 14, see ADR-004
+- [x] Configure Vitest with separate unit/integration/smoke globs
+- [x] Configure ESLint (flat config) + Prettier
+- [x] Configure path aliases (`@/` → `src/`) — native Vitest 4 resolution
+- [x] Create `.env.local` from previous project keys + `.env.example` template
+- [x] Create `develop` branch
+- [~] Open PR `chore/scaffold-nextjs` → develop (pending `gh` install / web)
 
 ## Milestone 2 — Core Engine
 - [ ] 🔴 Port `src/lib/engine.ts` — deterministic probability math

@@ -8,13 +8,19 @@ description: Architecture reference for parlay-predictor. Read this before desig
 ## Stack
 | Layer | Technology | Why |
 |---|---|---|
-| Frontend + API | Next.js 14 (App Router) | Full-stack, Vercel-native, SSR for auth |
+| Frontend + API | Next.js 16 (App Router, Turbopack) | Full-stack, Vercel-native, SSR for auth |
+| UI | React 19 + Tailwind CSS v4 | Latest stable; Tailwind v4 is CSS-config (no tailwind.config.js) |
 | Database + Auth | Supabase | RLS, realtime, free tier generous |
 | AI | Groq (Llama 3.3 70B) | Free tier, fast inference, tool use |
 | Deployment | Vercel | Zero-config Next.js |
 | Language | TypeScript strict mode | Catch errors at compile time |
-| Testing | Vitest | Fast, ESM-native, vitest config simple |
+| Testing | Vitest 4 | Fast, ESM-native, native tsconfig path resolution |
+| Linting/Format | ESLint 9 (flat config) + Prettier | Consistency, CI-enforced |
 | Validation | Zod | Runtime type-safety at API boundaries |
+
+> ⚠️ **Next.js 16 has breaking changes vs older training data.** Before writing
+> Next-specific code (API routes, middleware, server components), consult
+> `node_modules/next/dist/docs/` — see `AGENTS.md` at the repo root.
 
 ## Folder Structure
 ```

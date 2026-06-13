@@ -78,6 +78,7 @@ update code                         # meaningless
 ```
 
 ## Co-author line (add to every commit)
+Use the model you are actually running as (check the session), e.g.:
 ```
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
 ```
