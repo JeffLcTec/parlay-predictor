@@ -20,7 +20,7 @@ Status: [ ] open | [~] in-progress | [x] done
 - [x] Configure path aliases (`@/` → `src/`) — native Vitest 4 resolution
 - [x] Create `.env.local` from previous project keys + `.env.example` template
 - [x] Create `develop` branch
-- [~] Open PR `chore/scaffold-nextjs` → develop (pending `gh` install / web)
+- [x] Open PR `chore/scaffold-nextjs` → develop — merged as PR #1, CI green
 
 ## Milestone 2 — Core Engine
 - [ ] 🔴 Port `src/lib/engine.ts` — deterministic probability math

@@ -6,8 +6,8 @@ Sessions are added at the TOP (newest first).
 
 ## Session — 2026-06-12 (Milestone 1: Project Scaffold)
 
-**Branch:** chore/scaffold-nextjs (PR → develop)
-**Status:** verification green, pending PR
+**Branch:** chore/scaffold-nextjs → merged to develop via PR #1
+**Status:** ✅ shipped — repo public at https://github.com/JeffLcTec/parlay-predictor, CI green on develop
 
 ### Done
 - Scaffolded the app with `create-next-app@latest`: **Next.js 16.2.9 + React 19 + Tailwind v4 + ESLint 9** (flat config), App Router, `src/` dir, `@/*` alias
