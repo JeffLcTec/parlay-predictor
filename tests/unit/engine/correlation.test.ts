@@ -26,10 +26,17 @@ const leg = (matchId: string, market: SoccerMarket, bookOdds: number): Leg => ({
 });
 
 describe('describeMarket', () => {
-  it('renders human-readable Spanish labels', () => {
+  it('renders human-readable Spanish labels for every market type', () => {
     expect(describeMarket({ type: 'result', pick: 'home' })).toMatch(/local/i);
-    expect(describeMarket({ type: 'over_under', line: 2.5, pick: 'over' })).toContain('2.5');
+    expect(describeMarket({ type: 'result', pick: 'away' })).toMatch(/visitante/i);
+    expect(describeMarket({ type: 'result', pick: 'draw' })).toMatch(/empate/i);
+    expect(describeMarket({ type: 'double_chance', pick: '1X' })).toContain('1X');
     expect(describeMarket({ type: 'btts', pick: 'yes' })).toMatch(/ambos/i);
+    expect(describeMarket({ type: 'btts', pick: 'no' })).toMatch(/no ambos/i);
+    expect(describeMarket({ type: 'over_under', line: 2.5, pick: 'over' })).toContain('2.5');
+    expect(describeMarket({ type: 'over_under', line: 1.5, pick: 'under' })).toContain('under');
+    expect(describeMarket({ type: 'asian_handicap', line: -1, side: 'home' })).toMatch(/local/i);
+    expect(describeMarket({ type: 'asian_handicap', line: 1, side: 'away' })).toContain('+1');
   });
 });
 
@@ -105,5 +112,39 @@ describe('evaluateSynergy', () => {
     // independent fallback: joint = product of book-implied probs = 0.5 * 0.5
     expect(report.perMatch[0].joint).toBeCloseTo(0.25, 10);
     expect(report.perMatch[0].relation).toBe('neutral');
+  });
+
+  it('falls back to independence when the market cannot be calibrated', () => {
+    const legs = [
+      leg('m1', { type: 'result', pick: 'home' }, 2.0),
+      leg('m1', { type: 'btts', pick: 'yes' }, 2.0),
+    ];
+    // A 50/50 with zero draw probability is impossible under Poisson, so no λ
+    // fits → calibrate returns ok=false → the engine uses the independent path.
+    const unfittable: MatchInput = { label: 'X vs Y', targets: { home: 0.5, draw: 0, away: 0.5 } };
+    const report = evaluateSynergy(legs, { m1: unfittable });
+    expect(report.perMatch[0].joint).toBeCloseTo(0.25, 10);
+    expect(report.perMatch[0].relation).toBe('neutral');
+  });
+
+  it('reports a near-independent pair as neutral (no conflict, no stacking)', () => {
+    const legs = [
+      leg('m1', { type: 'result', pick: 'home' }, 2.0),
+      leg('m1', { type: 'over_under', line: 1.5, pick: 'over' }, 1.3),
+    ];
+    const report = evaluateSynergy(legs, { m1: inputFrom('A vs B', 1.6, 1.3) });
+    expect(report.conflicts).toHaveLength(0);
+    expect(report.stacking).toHaveLength(0);
+    expect(report.perMatch[0].relation).toBe('neutral');
+    expect(report.verdict).toBe('approve');
+  });
+
+  it('handles a zero-probability leg without dividing by zero', () => {
+    const legs = [
+      leg('m1', { type: 'result', pick: 'home' }, 2.0),
+      leg('m1', { type: 'over_under', line: 50.5, pick: 'over' }, 1.5), // unreachable total
+    ];
+    const report = evaluateSynergy(legs, { m1: inputFrom('A vs B', 1.5, 1.1) });
+    expect(report.perMatch[0].lift).toBe(0);
   });
 });

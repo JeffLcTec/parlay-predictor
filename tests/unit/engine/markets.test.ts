@@ -42,6 +42,36 @@ describe('marketProbability', () => {
     const ahHomeMinusHalf: SoccerMarket = { type: 'asian_handicap', line: -0.5, side: 'home' };
     expect(marketProbability(grid, ahHomeMinusHalf)).toBeCloseTo(marketProbability(grid, home), 10);
   });
+
+  it('double chance 12 equals home + away (i.e. not a draw)', () => {
+    const grid = buildScoreGrid(1.5, 1.2);
+    const dc12: SoccerMarket = { type: 'double_chance', pick: '12' };
+    expect(marketProbability(grid, dc12)).toBeCloseTo(
+      marketProbability(grid, home) + marketProbability(grid, away),
+      10
+    );
+  });
+
+  it('double chance X2 equals draw + away', () => {
+    const grid = buildScoreGrid(1.5, 1.2);
+    const dcX2: SoccerMarket = { type: 'double_chance', pick: 'X2' };
+    expect(marketProbability(grid, dcX2)).toBeCloseTo(
+      marketProbability(grid, draw) + marketProbability(grid, away),
+      10
+    );
+  });
+
+  it('BTTS-no is the complement of BTTS-yes', () => {
+    const grid = buildScoreGrid(1.4, 1.3);
+    const bttsNo: SoccerMarket = { type: 'btts', pick: 'no' };
+    expect(marketProbability(grid, bttsYes) + marketProbability(grid, bttsNo)).toBeCloseTo(1, 10);
+  });
+
+  it('Asian handicap away -0.5 is identical to an away win', () => {
+    const grid = buildScoreGrid(1.0, 1.8);
+    const ahAwayMinusHalf: SoccerMarket = { type: 'asian_handicap', line: -0.5, side: 'away' };
+    expect(marketProbability(grid, ahAwayMinusHalf)).toBeCloseTo(marketProbability(grid, away), 10);
+  });
 });
 
 describe('jointProbability', () => {

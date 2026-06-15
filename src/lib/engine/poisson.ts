@@ -45,11 +45,11 @@ export function buildScoreGrid(homeLambda: number, awayLambda: number, maxGoals 
     }
   }
 
-  if (total > 0) {
-    for (let i = 0; i <= maxGoals; i++) {
-      for (let j = 0; j <= maxGoals; j++) {
-        grid[i][j] /= total;
-      }
+  // total is always > 0: P(0 goals) = e^-λ > 0 for any finite λ, so the (0,0)
+  // cell alone makes the sum positive. Renormalize unconditionally.
+  for (let i = 0; i <= maxGoals; i++) {
+    for (let j = 0; j <= maxGoals; j++) {
+      grid[i][j] /= total;
     }
   }
   return grid;

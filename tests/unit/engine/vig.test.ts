@@ -34,4 +34,8 @@ describe('removeVig', () => {
     expect(raw).toBeGreaterThan(1);
     expect(probs[0]).toBeLessThan(1 / 1.9);
   });
+
+  it('an empty input returns an empty array (no divide by zero)', () => {
+    expect(removeVig([])).toEqual([]);
+  });
 });

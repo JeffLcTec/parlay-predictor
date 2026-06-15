@@ -50,4 +50,14 @@ describe('applyFactors', () => {
     expect(out.homeLambda).toBeGreaterThan(0);
     expect(out.awayLambda).toBeGreaterThan(0);
   });
+
+  it('ignores a non-positive league pace', () => {
+    expect(applyFactors(base, { leaguePace: 0 })).toEqual(base);
+  });
+
+  it('handles a zero-total base without dividing by zero (clamps to the floor)', () => {
+    const out = applyFactors({ homeLambda: 0, awayLambda: 0 }, { leaguePace: 2 });
+    expect(out.homeLambda).toBeGreaterThan(0);
+    expect(out.awayLambda).toBeGreaterThan(0);
+  });
 });
