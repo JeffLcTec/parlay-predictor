@@ -25,16 +25,17 @@ Status: [ ] open | [~] in-progress | [x] done
 ## Milestone 2 — Synergy Engine (soccer-first)
 Design: `docs/superpowers/specs/2026-06-14-synergy-engine-design.md`
 Build order in `src/lib/engine/`, TDD, 100% unit coverage (pure math):
-- [ ] 🔴 `types.ts` — Leg, SoccerMarket, ScoreGrid, MatchModel, SynergyReport
-- [ ] 🔴 `poisson.ts` + tests — poissonPmf, buildScoreGrid
-- [ ] 🔴 `vig.ts` + tests — impliedProbability, removeVig (port deterministic odds math)
-- [ ] 🔴 `markets.ts` + tests — marketPredicate, marketProbability, jointProbability
-- [ ] 🔴 `calibration.ts` + tests — fit λ from de-vigged odds (round-trip tests)
-- [ ] 🔴 `factors.ts` + tests — bounded cross-match λ adjustments
-- [ ] 🔴 `correlation.ts` + tests — evaluateSynergy → SynergyReport (conflicts/stacking/fair odds)
-- [ ] 🟡 ADR-005: Poisson scoreline model for soccer same-game correlation
-- [ ] 🔴 `parlay.ts` + tests — extractJson, computeParlayStatus (still needed)
-- [ ] 🔴 Zod validation schemas (`src/lib/validation.ts`)
+- [x] `types.ts` — Leg, SoccerMarket, ScoreGrid, MatchModel, SynergyReport
+- [x] `poisson.ts` + tests — poissonPmf, buildScoreGrid
+- [x] `vig.ts` + tests — impliedProbability, removeVig (port deterministic odds math)
+- [x] `markets.ts` + tests — marketPredicate, marketProbability, jointProbability
+- [x] `calibration.ts` + tests — fit λ from de-vigged odds (round-trip tests)
+- [x] `factors.ts` + tests — bounded cross-match λ adjustments
+- [x] `correlation.ts` + tests — evaluateSynergy → SynergyReport (conflicts/stacking/fair odds)
+- [x] ADR-005: Poisson scoreline model for soccer same-game correlation
+- [x] Engine at 100% unit coverage (58 tests) — PR #2
+- [ ] 🟡 `parlay.ts` + tests — extractJson, computeParlayStatus (follow-up, pairs with API work)
+- [ ] 🟡 Zod validation schemas (`src/lib/validation.ts`) (follow-up, pairs with API routes)
 
 > AI integration of the engine (register `evaluate_parlay_synergy` as a tool +
 > prompt rules for the iterative propose→validate→revise loop) lands in
