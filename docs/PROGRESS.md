@@ -4,10 +4,32 @@ Sessions are added at the TOP (newest first).
 
 ---
 
+## Session — 2026-06-14 (Milestone 2: Synergy Engine)
+
+**Branch:** feature/engine-synergy (PR #2 → develop)
+**Status:** engine complete, 100% coverage, pending PR review
+
+### Design
+- Brainstormed the deterministic correlation engine; decisions: soccer-first, all-three goals from one model, same-match + bounded cross-match factors, iterative AI↔engine loop, output = adjusted odds + conflicts + stacking labels, hybrid Poisson math.
+- Spec written: `docs/superpowers/specs/2026-06-14-synergy-engine-design.md`. ADR-005 recorded.
+- Process note: kept the execution plan in `docs/TASKS.md` (no separate plan doc) per user direction.
+
+### Done (all TDD, 100% unit coverage, 58 tests)
+- `src/lib/engine/` built module by module: `types`, `poisson` (scoreline grid), `vig` (de-vig), `markets` (each market = grid region; exact joint), `calibration` (fit λ via grid search, round-trip tested), `factors` (bounded λ nudges), `correlation` (evaluateSynergy → SynergyReport).
+- Coverage 100% statements/branches/functions/lines. Excluded generated `coverage/` from eslint.
+- A test caught my wrong intuition: "home win + Over 2.5" is *positively* correlated, not negative — the model corrected me.
+
+### Next Steps
+1. Open PR #2 `feature/engine-synergy` → develop, CI green, merge.
+2. Follow-up (small): `parlay.ts` (extractJson, computeParlayStatus) + Zod `validation.ts` — pair these with the API work.
+3. Milestone 3 — AI Agent: port agent/tools/prompts AND register `evaluate_parlay_synergy` as a tool with the iterative-loop prompt rules.
+
+---
+
 ## Session — 2026-06-12 (Milestone 1: Project Scaffold)
 
-**Branch:** chore/scaffold-nextjs (PR → develop)
-**Status:** verification green, pending PR
+**Branch:** chore/scaffold-nextjs → merged to develop via PR #1
+**Status:** ✅ shipped — repo public at https://github.com/JeffLcTec/parlay-predictor, CI green on develop
 
 ### Done
 - Scaffolded the app with `create-next-app@latest`: **Next.js 16.2.9 + React 19 + Tailwind v4 + ESLint 9** (flat config), App Router, `src/` dir, `@/*` alias

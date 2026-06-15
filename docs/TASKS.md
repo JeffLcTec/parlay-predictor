@@ -20,21 +20,33 @@ Status: [ ] open | [~] in-progress | [x] done
 - [x] Configure path aliases (`@/` → `src/`) — native Vitest 4 resolution
 - [x] Create `.env.local` from previous project keys + `.env.example` template
 - [x] Create `develop` branch
-- [~] Open PR `chore/scaffold-nextjs` → develop (pending `gh` install / web)
+- [x] Open PR `chore/scaffold-nextjs` → develop — merged as PR #1, CI green
 
-## Milestone 2 — Core Engine
-- [ ] 🔴 Port `src/lib/engine.ts` — deterministic probability math
-- [ ] 🔴 Unit tests for engine (100% coverage target)
-- [ ] 🔴 Port `src/lib/parlay.ts` — extractJson, computeParlayStatus
-- [ ] 🔴 Unit tests for parlay utils (100% coverage)
-- [ ] 🔴 Add Zod validation schemas (`src/lib/validation.ts`)
-- [ ] 🟡 ADR-001: Why deterministic engine over LLM probability estimation
+## Milestone 2 — Synergy Engine (soccer-first)
+Design: `docs/superpowers/specs/2026-06-14-synergy-engine-design.md`
+Build order in `src/lib/engine/`, TDD, 100% unit coverage (pure math):
+- [x] `types.ts` — Leg, SoccerMarket, ScoreGrid, MatchModel, SynergyReport
+- [x] `poisson.ts` + tests — poissonPmf, buildScoreGrid
+- [x] `vig.ts` + tests — impliedProbability, removeVig (port deterministic odds math)
+- [x] `markets.ts` + tests — marketPredicate, marketProbability, jointProbability
+- [x] `calibration.ts` + tests — fit λ from de-vigged odds (round-trip tests)
+- [x] `factors.ts` + tests — bounded cross-match λ adjustments
+- [x] `correlation.ts` + tests — evaluateSynergy → SynergyReport (conflicts/stacking/fair odds)
+- [x] ADR-005: Poisson scoreline model for soccer same-game correlation
+- [x] Engine at 100% unit coverage (58 tests) — PR #2
+- [ ] 🟡 `parlay.ts` + tests — extractJson, computeParlayStatus (follow-up, pairs with API work)
+- [ ] 🟡 Zod validation schemas (`src/lib/validation.ts`) (follow-up, pairs with API routes)
+
+> AI integration of the engine (register `evaluate_parlay_synergy` as a tool +
+> prompt rules for the iterative propose→validate→revise loop) lands in
+> Milestone 3, when the agent is built.
 
 ## Milestone 3 — AI Agent
 - [ ] 🔴 Port `src/lib/ai/agent.ts` with MODEL_CHAIN, retry logic, context trimming
 - [ ] 🔴 Unit tests for `parseRetryAfterSeconds` and `trimOldToolResults`
 - [ ] 🔴 Port `src/lib/ai/tools.ts` with all 6 tools (ESPN, Tavily, Odds, football-data)
 - [ ] 🔴 Port `src/lib/ai/prompts.ts` with anti-hallucination + role player rules
+- [ ] 🔴 Register `evaluate_parlay_synergy` tool (wraps Milestone 2 engine) + prompt rules for the iterative propose→validate→revise loop
 - [ ] 🟡 Smoke test: get_player_stats returns real data
 - [ ] 🟡 Smoke test: full parlay generation with role player diversification
 
